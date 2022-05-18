@@ -1,0 +1,36 @@
+version: "3"
+services:
+
+  front-end:
+    container_name: front-end
+    restart: always
+    build: ./front-end
+    stdin_open: true
+    ports:
+      - "3000:3000"
+    networks:
+      - motorbike-app
+  back-end:
+    container_name: back-end
+    restart: always
+    build: ./back-end
+    ports:
+      - "5000:5000"
+    networks:
+      - motorbike-app
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:5.0-focal
+    ports:
+      - "27017:27017"
+    networks:
+      - motorbike-app
+    volumes:
+      - mongo-data:/data/db
+networks:
+  motorbike-app:
+    driver: bridge
+volumes:
+  mongo-data:
+    driver: local
